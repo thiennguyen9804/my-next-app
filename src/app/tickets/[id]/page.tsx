@@ -1,7 +1,19 @@
-type Props = {
+import { notFound } from "next/navigation";
+import { ReactNode } from "react";
+
+type Params = {
   params: { id: string }
 }
 
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const res = await fetch('http://localhost:4000/tickets');
+  const tickets: Ticket[] = await res.json();
+  return tickets.map((ticket) => ({
+    id: ticket.id
+  }));
+}
 
 async function getTicket(id: string): Promise<Ticket> {
   const res = await fetch('http://localhost:4000/tickets/' + id, {
@@ -9,11 +21,14 @@ async function getTicket(id: string): Promise<Ticket> {
       revalidate: 30
     }
   });
+  if (!res.ok) {
+    notFound();
+  }
   return res.json();
 }
 
-export default async function TicketDetails({ params }: Props) {
-  const { id } = params;
+export default async function TicketDetails({ params }: Readonly<Params>) {
+  const { id } = await params;
   const ticket = await getTicket(id);
 
   return (

@@ -1,9 +1,11 @@
 import Link from "next/link";
 
+
+
 async function getTickets(): Promise<Ticket[]> {
   const res = await fetch('http://localhost:4000/tickets', {
     next: {
-      revalidate: 30
+      revalidate: 0
     }
   });
   return res.json();
@@ -27,7 +29,6 @@ export default async function TicketList() {
         </div>
       ))}
       {tickets.length === 0 && (
-
         <p className="text-center">There are no open tickets, yay!</p>
       )}
     </>
