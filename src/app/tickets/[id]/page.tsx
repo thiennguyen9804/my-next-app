@@ -4,7 +4,7 @@ type Props = {
 
 
 async function getTicket(id: string): Promise<Ticket> {
-  const res = await fetch('http://localhost:4000/tickets' + id, {
+  const res = await fetch('http://localhost:4000/tickets/' + id, {
     next: {
       revalidate: 30
     }
@@ -13,7 +13,7 @@ async function getTicket(id: string): Promise<Ticket> {
 }
 
 export default async function TicketDetails({ params }: Props) {
-  const id = params.id;
+  const { id } = params;
   const ticket = await getTicket(id);
 
   return (
