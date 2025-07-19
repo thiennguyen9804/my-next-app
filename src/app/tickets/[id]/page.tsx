@@ -16,6 +16,8 @@ export async function generateStaticParams() {
 }
 
 async function getTicket(id: string): Promise<Ticket> {
+
+  await new Promise(resolve => setTimeout(resolve, 3000));
   const res = await fetch('http://localhost:4000/tickets/' + id, {
     next: {
       revalidate: 30
@@ -27,7 +29,7 @@ async function getTicket(id: string): Promise<Ticket> {
   return res.json();
 }
 
-export default async function TicketDetails({ params }: Readonly<Params>) {
+export default async function TicketDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ticket = await getTicket(id);
 

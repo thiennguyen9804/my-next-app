@@ -5,6 +5,7 @@ type Ticket = {
   body: string,
   priority: string,
   user_email: string,
-
 }
+
+type AddTicket = Partial<Ticket>;
 
